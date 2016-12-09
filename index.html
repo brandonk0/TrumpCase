@@ -1,0 +1,179 @@
+<html>
+  <head>
+    <style>
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #fff;
+        text-align: center;
+        background-image: url("bg.png");
+        background-position: center;
+
+      }
+      img {
+        height: 250px;
+        opacity: 0.5;
+      }
+      img.hl {
+        opacity: 1;
+      }
+      #canvas {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .hide {
+        display: none;
+      }
+      .full {
+        position: absolute top 50px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <p style="display:none"><button id="spin">SPIN!</button><button id="play">PLAY!</button></p>
+    <p style="display:none">
+      <img id="i1" src="oijwef">
+      <img id="i2" src="oijwef">
+      <img id="i3" src="oijwef">
+    </p>
+    <p>
+      <video id="a1" class="hide"></video>
+      <video id="a2" class="hide"></video>
+      <video id="a3" class="hide"></video>
+      <audio id="spinsound" src="dead.mp3"></audio>
+    </p>
+
+<canvas id="canvas"></canvas>
+
+<script>
+window.onload = function() {
+      document.querySelector('#i1').src = '';
+      document.querySelector('#i2').src = '';
+      document.querySelector('#i3').src = '';
+      document.querySelector('#i1').className = '';
+      document.querySelector('#i2').className = '';
+      document.querySelector('#i3').className = '';
+      colorSpinInterval = setInterval(changeBgColor, 5);
+      setTimeout(pick, 4700);
+      document.querySelector('#spinsound').currentTime = 0;
+      setTimeout(function () {
+        document.querySelector('#spinsound').play();
+      }, 50);
+        document.querySelector('#a1').play();
+}
+</script>
+  <script>
+    var sourcevideos = [
+      ['freedom.mp4', 'future1.mp4','cartoon1.mov','theylive.mov','cameos.mov'
+      ],
+      ['link.mp4' , 'future2.mp4','simpsons1.mov','running.mov','rage.mov'
+      ],
+      ['escalator.mp4','future3.mov','simpsons2.mov','fresh.mov']
+
+    ];
+
+    var soundbank = [sourcevideos];
+    var colorSpinInterval;
+
+    var images = [
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Trump-Pence_2016.svg/640px-Trump-Pence_2016.svg.png',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Trump-Pence_2016.svg/640px-Trump-Pence_2016.svg.png',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Trump-Pence_2016.svg/640px-Trump-Pence_2016.svg.png'
+    ];
+
+    function changeBgColor() {
+      var r = Math.floor(Math.random()*255);
+      var g = Math.floor(Math.random()*255);
+      var b = Math.floor(Math.random()*255);
+      var color = 'rgb(' + r + ',' + g + ',' + b + ')';
+      document.body.style.backgroundColor = color;
+    }
+
+    function pick () {
+      clearInterval(colorSpinInterval);
+      var randomBankIndex1 = Math.floor(Math.random()*soundbank.length);
+      var randomBankIndex2 = Math.floor(Math.random()*soundbank.length);
+      var randomBankIndex3 = Math.floor(Math.random()*soundbank.length);
+
+      var randomBank1 = soundbank[randomBankIndex1];
+      var randomBank2 = soundbank[randomBankIndex2];
+      var randomBank3 = soundbank[randomBankIndex3];
+
+      var randomSound1 = randomBank1[0][Math.floor(Math.random()*randomBank1[0].length)];
+      var randomSound2 = randomBank2[1][Math.floor(Math.random()*randomBank2[1].length)];
+      var randomSound3 = randomBank3[2][Math.floor(Math.random()*randomBank3[2].length)];
+
+      document.querySelector('#a1').src = randomSound1;
+      document.querySelector('#a2').src = randomSound2;
+      document.querySelector('#a3').src = randomSound3;
+
+      document.querySelector('#a2').onended = function () {
+        document.querySelector('#a3').play();
+        document.querySelector('#a1').className = '';
+        document.querySelector('#i2').className = '';
+        document.querySelector('#i3').className = 'hl';
+      };
+
+      document.querySelector('#a1').onended = function () {
+        document.querySelector('#a2').play();
+        document.querySelector('#i1').className = '';
+        document.querySelector('#i2').className = 'hl';
+      };
+
+      document.querySelector('#play').onclick = function () {
+        document.querySelector('#a1').play();
+        document.querySelector('#i1').className = 'hl';
+      };
+
+      document.querySelector('#i1').src = images[randomBankIndex1];
+      document.querySelector('#i2').src = images[randomBankIndex2];
+      document.querySelector('#i3').src = images[randomBankIndex3];
+
+    };
+
+  </script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var v = document.getElementById('a1');
+  var v2 = document.getElementById('a2');
+  var v3 = document.getElementById('a3');
+  var canvas = document.getElementById('canvas');
+  var context = canvas.getContext('2d');
+
+  var cw = Math.floor(canvas.clientWidth);
+  var ch = Math.floor(canvas.clientHeight);
+  canvas.width = cw;
+  canvas.height = ch;
+
+  v.addEventListener('play', function(){
+    draw(this,context,cw,ch);
+  },false);
+
+    v2.addEventListener('play', function(){
+    draw(this,context,cw,ch);
+  },false);
+
+      v3.addEventListener('play', function(){
+    draw(this,context,cw,ch);
+  },false);
+
+},false);
+
+function draw(v,c,w,h) {
+  if(v.paused || v.ended) return false;
+  c.drawImage(v,0,0,w,h);
+  setTimeout(draw,20,v,c,w,h);
+}
+</script>
+
+  </body>
+
+</html>
